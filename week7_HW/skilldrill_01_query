@@ -1,0 +1,32 @@
+
+-- Select all the employees who were born between January 1, 1952 and December 31, 1955 and their titles and title date ranges
+
+-- Order the results by emp_no
+Select employees.birth_date,titles.title,titles.from_date,titles.to_date
+from employees
+join titles on employees.emp_no = titles.emp_no
+where employees.birth_date::date > '1952-01-01' and  employees.birth_date::date < '1955-12-31'
+ORDER BY employees.emp_no
+
+-- Select only the current title for each employee
+Select employees.first_name,employees.last_name,titles.title,titles.to_date
+from employees
+join titles on employees.emp_no = titles.emp_no
+where titles.to_date::date >= '9999-01-01'
+
+-- Count the total number of employees about to retire by their current job title
+Select count(titles.emp_no), title
+from titles
+join employees on  titles.emp_no = employees.emp_no
+where titles.to_date::date < '9999-01-01'
+group by title
+-- Count the total number of employees per department
+
+Select count(dept_emp.emp_no), departments.dept_name
+from dept_emp
+join employees on  dept_emp.emp_no = employees.emp_no
+join departments on  departments.dept_no = dept_emp.dept_no
+group by departments.dept_name
+
+
+-- Bonus: Find the highest salary per department and department manager
